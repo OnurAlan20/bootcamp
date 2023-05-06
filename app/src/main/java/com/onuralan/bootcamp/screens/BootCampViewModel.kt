@@ -8,7 +8,6 @@ class BootCampViewModel:ViewModel(){
     var loginPassword = mutableStateOf("")
     var registerName = mutableStateOf("")
     var registerEmail = mutableStateOf("")
-
     var registerPassword = mutableStateOf("")
 }
 
