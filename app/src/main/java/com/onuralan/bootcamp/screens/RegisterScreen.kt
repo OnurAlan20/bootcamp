@@ -74,7 +74,12 @@ fun RegisterScreen(bootCampViewModel: BootCampViewModel){
 
             Spacer(modifier = Modifier.height(35.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    bootCampViewModel.register(bootCampViewModel.registerName.value,bootCampViewModel.registerEmail.value,bootCampViewModel.registerPassword.value)
+                    bootCampViewModel.registerName.value = ""
+                    bootCampViewModel.registerEmail.value = ""
+                    bootCampViewModel.registerPassword.value = ""
+                },
                 modifier = Modifier.width(300.dp),
                 elevation = ButtonDefaults.elevation(4.dp),
                 colors = ButtonDefaults.outlinedButtonColors(Color(0xFFC22C2C)),

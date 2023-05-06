@@ -38,8 +38,8 @@ fun LoginScreen(bootCampViewModel: BootCampViewModel){
                 onValueChange = {
                     bootCampViewModel.loginEmail.value = it
                 },
-                label = { Text(text = "User Name", fontSize = 18.sp,color = Color(0xFFD14C21)) },
-                placeholder = { Text(text = "Enter your User Name",fontSize = 18.sp,color = Color(0xFFD14C21)) },
+                label = { Text(text = "Email", fontSize = 18.sp,color = Color(0xFFD14C21)) },
+                placeholder = { Text(text = "Enter your Email",fontSize = 18.sp,color = Color(0xFFD14C21)) },
             )
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
@@ -57,7 +57,11 @@ fun LoginScreen(bootCampViewModel: BootCampViewModel){
 
             Spacer(modifier = Modifier.height(35.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                          bootCampViewModel.login(bootCampViewModel.loginEmail.value,bootCampViewModel.loginPassword.value)
+                    bootCampViewModel.loginEmail.value = ""
+                    bootCampViewModel.loginPassword.value = ""
+                },
                 modifier = Modifier.width(300.dp),
                 elevation = ButtonDefaults.elevation(4.dp),
                 colors = ButtonDefaults.outlinedButtonColors(Color(0xFFC22C2C)),
