@@ -17,10 +17,10 @@ import com.onuralan.bootcamp.ui.theme.BootcampTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var bcvm = BootCampViewModel()
         setContent {
             BootcampTheme {
-                LoginScreen(bootCampViewModel = BootCampViewModel())
-
+                LoginScreen(bootCampViewModel = bcvm)
             }
         }
     }
