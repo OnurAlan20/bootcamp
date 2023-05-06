@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.onuralan.bootcamp.screens.BootCampViewModel
 import com.onuralan.bootcamp.screens.LoginScreen
 import com.onuralan.bootcamp.ui.theme.BootcampTheme
 
@@ -18,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BootcampTheme {
-                LoginScreen()
+                LoginScreen(bootCampViewModel = BootCampViewModel())
 
             }
         }
