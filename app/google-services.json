@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "333056657029",
+    "project_id": "botcampcevre",
+    "storage_bucket": "botcampcevre.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333056657029:android:4e48fcd68c58cb157a8bec",
+        "android_client_info": {
+          "package_name": "com.onuralan.bootcamp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333056657029-elpggim7iativa2spefn8tl3siimq105.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMUnlPHQ95yjKFQIgcyg4VC6HkPlrLAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333056657029-elpggim7iativa2spefn8tl3siimq105.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
