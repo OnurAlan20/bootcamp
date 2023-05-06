@@ -10,18 +10,25 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.onuralan.bootcamp.network.sendGPTPropt
 import com.onuralan.bootcamp.screens.BootCampViewModel
 import com.onuralan.bootcamp.screens.LoginScreen
 import com.onuralan.bootcamp.screens.RegisterScreen
 import com.onuralan.bootcamp.ui.theme.BootcampTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bcvm = BootCampViewModel()
         bcvm.initFirebase()
+        GlobalScope.launch {
+            sendGPTPropt("")
+        }
         setContent {
             BootcampTheme {
+
                 LoginScreen(bootCampViewModel = bcvm)
             }
         }

@@ -1,14 +1,22 @@
 package com.onuralan.bootcamp.screens
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.type.DateTime
+import com.onuralan.bootcamp.models.Message
 import com.onuralan.bootcamp.models.User
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class BootCampViewModel:ViewModel(){
@@ -74,6 +82,38 @@ class BootCampViewModel:ViewModel(){
                 println("Registiration Failed")
             }
         }
+    }
+
+    fun getMessages(messageList:SnapshotStateList<Message>){
+        GlobalScope.launch {
+            db.collection("messages").orderBy("date",
+                Query.Direction.DESCENDING).addSnapshotListener(EventListener { value, error ->
+                if (value != null) {
+                    for (message in value.documentChanges){
+                        println(message.document.data.get("message"))
+                        messageList.add(Message(message.document.data.get("message") as String,
+                            message.document.data.get("uid") as String))
+                    }
+
+                }
+            })
+        }
+
+    }
+    fun sendMessage(message:String){
+        var msg = hashMapOf(
+            "message" to message,
+            "uid" to user.uid,
+            "time" to FieldValue.serverTimestamp()
+        )
+        GlobalScope.launch {
+            db.collection("messages").add(msg).addOnCompleteListener {
+                if (it.isSuccessful){
+                    println("Message send")
+                }
+            }
+        }
+
     }
 }
 
