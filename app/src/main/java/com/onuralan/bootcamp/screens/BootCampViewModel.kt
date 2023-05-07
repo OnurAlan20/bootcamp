@@ -29,7 +29,7 @@ class BootCampViewModel:ViewModel(){
     var gptResponse = mutableStateOf("")
     var gptRequest = mutableStateOf("")
     var message = mutableStateOf("")
-    var messageList = mutableListOf(Message("Bu gün işe araba yerine yürüyerek gidip geldim.","Sarp"))
+    var messageList = mutableStateListOf(Message("Bu gün işe araba yerine yürüyerek gidip geldim.","Sarp"))
 
 
 
@@ -96,7 +96,9 @@ class BootCampViewModel:ViewModel(){
         GlobalScope.launch {
             db.collection("messages").orderBy("date",
                 Query.Direction.DESCENDING).addSnapshotListener(EventListener { value, error ->
+                System.out.println("UPDATED")
                 if (value != null) {
+
                     for (message in value.documentChanges){
                         println(message.document.data.get("message"))
                         messageList.add(Message(message.document.data.get("message") as String,

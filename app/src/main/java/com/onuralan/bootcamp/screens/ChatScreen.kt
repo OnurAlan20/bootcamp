@@ -24,11 +24,12 @@ import androidx.compose.ui.unit.sp
 fun ChatScreen(bootCampViewModel: BootCampViewModel){
     var mesages = bootCampViewModel.messageList
 
+    bootCampViewModel.getMessages(mesages)
     Surface(modifier = Modifier.fillMaxSize(), color = Color(0xABFFFFFF)) {
         Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(modifier = Modifier.fillMaxHeight(0.8f)) {
                 LazyColumn{
-                    items(bootCampViewModel.messageList){item ->
+                    items(mesages){item ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
