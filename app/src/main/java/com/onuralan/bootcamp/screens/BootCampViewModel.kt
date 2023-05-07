@@ -1,5 +1,6 @@
 package com.onuralan.bootcamp.screens
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
@@ -25,10 +26,17 @@ class BootCampViewModel:ViewModel(){
     var registerName = mutableStateOf("")
     var registerEmail = mutableStateOf("")
     var registerPassword = mutableStateOf("")
+    var gptResponse = mutableStateOf("")
+    var gptRequest = mutableStateOf("")
+    var message = mutableStateOf("")
+    var messageList = mutableListOf(Message("Bu gün işe araba yerine yürüyerek gidip geldim.","Sarp"))
+
+
+
     private lateinit var auth:FirebaseAuth;
     var currentUser:FirebaseUser? = null
     lateinit var db:FirebaseFirestore
-    lateinit var user:User
+    var user:User = User("sarp dora","sarpdorayonden@gmail.com","edc123..","Ggvb5bGRF4drqKSW6XIyDRA8YSl1")
     public fun initFirebase(){
         auth = Firebase.auth
         currentUser = auth.currentUser
@@ -92,7 +100,7 @@ class BootCampViewModel:ViewModel(){
                     for (message in value.documentChanges){
                         println(message.document.data.get("message"))
                         messageList.add(Message(message.document.data.get("message") as String,
-                            message.document.data.get("uid") as String))
+                            message.document.data.get("name") as String))
                     }
 
                 }
@@ -103,7 +111,7 @@ class BootCampViewModel:ViewModel(){
     fun sendMessage(message:String){
         var msg = hashMapOf(
             "message" to message,
-            "uid" to user.uid,
+            "name" to user.name,
             "time" to FieldValue.serverTimestamp()
         )
         GlobalScope.launch {

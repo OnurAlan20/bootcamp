@@ -4,5 +4,5 @@ import com.google.type.DateTime
 
 data class Message(
     var message:String,
-    var uid:String
+    var name:String
 )

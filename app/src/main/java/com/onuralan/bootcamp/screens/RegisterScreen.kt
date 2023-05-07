@@ -76,7 +76,6 @@ fun RegisterScreen(bootCampViewModel: BootCampViewModel){
             Button(
                 onClick = {
                     bootCampViewModel.register(bootCampViewModel.registerName.value,bootCampViewModel.registerEmail.value,bootCampViewModel.registerPassword.value)
-                    bootCampViewModel.registerName.value = ""
                     bootCampViewModel.registerEmail.value = ""
                     bootCampViewModel.registerPassword.value = ""
                 },
