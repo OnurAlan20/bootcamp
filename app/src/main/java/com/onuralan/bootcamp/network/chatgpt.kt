@@ -28,7 +28,7 @@ suspend fun sendGPTPropt(message:String):String?{
         // additional configurations...
     )
 
-    val openAI = OpenAI("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")
+    val openAI = OpenAI("xxxx")
     openAI.model(ModelId("gpt-3.5-turbo"))
 
     val chatCompletionRequest = ChatCompletionRequest(
