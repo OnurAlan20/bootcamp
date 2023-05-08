@@ -8,9 +8,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,38 +17,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.onuralan.bootcamp.Screens
 
 @Composable
-fun ChatScreen(bootCampViewModel: BootCampViewModel){
-    var mesages = bootCampViewModel.messageList
+fun ChatScreen(bootCampViewModel: BootCampViewModel,navController: NavController){
+    bootCampViewModel.getMessages(bootCampViewModel.messageList)
 
-    bootCampViewModel.getMessages(mesages)
-    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xABFFFFFF)) {
+
+    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xB9F3E6E6)) {
         Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Column(modifier = Modifier.fillMaxHeight(0.8f)) {
                 LazyColumn{
-                    items(mesages){item ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .padding(15.dp),
-                            backgroundColor = Color(0x9C764BB1),
-                            shape = RoundedCornerShape(25.dp)
+                    items(bootCampViewModel.messageList){item ->
+
+                        Column(
+                                        modifier = Modifier.fillMaxSize().padding(horizontal = 9.dp, vertical = 9.dp),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.Start
                         ) {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = item.name, fontSize = 18.sp)
-                                Spacer(modifier = Modifier.height(5.dp))
-                                Text(text = item.message, fontSize = 18.sp)
-
-                            }
-
-
+                                        Text(text = item.name, fontSize = 21.sp, color = Color(
+                                            0xFFCC4317
+                                        )
+                                        )
+                                        Spacer(modifier = Modifier.height(5.dp))
+                                        Text(text = item.message, fontSize = 18.sp,color = Color(
+                                            0xFF161514
+                                        )
+                                        )
                         }
+
+
                     }
                 }
 
@@ -78,7 +75,9 @@ fun ChatScreen(bootCampViewModel: BootCampViewModel){
                         contentDescription = "",
                         modifier = Modifier.clickable {
                             bootCampViewModel.sendMessage(bootCampViewModel.message.value)
+                            bootCampViewModel.message.value = ""
                         }
+
                     )}
                 )
                 Spacer(modifier = Modifier.height(15.dp))
@@ -91,10 +90,10 @@ fun ChatScreen(bootCampViewModel: BootCampViewModel){
                     BottomNavigation {
                         BottomNavigationItem(
                             selected = true,
-                            onClick = { /* Home ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
+                            onClick = { navController.navigate(Screens.MainScreen.route) },
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Default.Home,
+                                    imageVector = Icons.Default.AccountBox,
                                     contentDescription = "",
                                     tint = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
                                 )
@@ -102,25 +101,15 @@ fun ChatScreen(bootCampViewModel: BootCampViewModel){
                         )
                         BottomNavigationItem(
                             selected = false,
-                            onClick = { /* Para ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
+                            onClick = { navController.navigate(Screens.ChatScreen.route) },
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Default.Home,
+                                    imageVector = Icons.Default.MailOutline,
                                     contentDescription = "",
                                     tint = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
                                 )
                             }
                         )
-                        BottomNavigationItem(
-                            selected = false,
-                            onClick = { /* Chat ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = "",
-                                    tint = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
-                                )
-                            })
                     }
 
                 }
@@ -134,5 +123,5 @@ fun ChatScreen(bootCampViewModel: BootCampViewModel){
 @Preview
 @Composable
 fun defaultChatScreen(){
-    ChatScreen(bootCampViewModel = BootCampViewModel())
+    //ChatScreen(bootCampViewModel = BootCampViewModel())
 }

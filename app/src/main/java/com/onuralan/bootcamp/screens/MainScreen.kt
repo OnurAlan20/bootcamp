@@ -1,33 +1,42 @@
 package com.onuralan.bootcamp.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.google.type.Money
 import com.onuralan.bootcamp.R
+import com.onuralan.bootcamp.Screens
 import com.onuralan.bootcamp.network.sendGPTPropt
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen(bootCampViewModel: BootCampViewModel){
+fun MainScreen(bootCampViewModel: BootCampViewModel,navController: NavController){
+
+
+
     Surface(modifier = Modifier
         .fillMaxSize(),
         color = Color(0x88FFFFFF)
@@ -36,13 +45,32 @@ fun MainScreen(bootCampViewModel: BootCampViewModel){
         Column(modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()) {
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.2f),
+                    .fillMaxHeight(0.7f),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.green),
+                    contentDescription = "Resim Açıklaması",
+                    modifier = Modifier.size(200.dp) // Resim boyutunu ayarlamak için gerekli
+                )
+
+                Text(
+                    text = bootCampViewModel.gptResponse.value,
+                    fontSize = 20.sp,
+                    color = Color(0xFFD14C21),
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 20.dp)
+                )
+            }
+
+            Column(modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
                 OutlinedTextField(
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
@@ -66,42 +94,27 @@ fun MainScreen(bootCampViewModel: BootCampViewModel){
                             GlobalScope.launch {
                                 bootCampViewModel.gptResponse.value = sendGPTPropt(bootCampViewModel.gptRequest.value)!!
                             }
+
                         }
                     )}
                 )
-            }
+                Spacer(modifier = Modifier.height(12.dp))
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.8f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = bootCampViewModel.gptResponse.value,
-                    fontSize = 20.sp,
-                    color = Color(0xFFD14C21),
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                )
-            }
-
-            Column(modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(), verticalArrangement = Arrangement.Bottom) {
                 BottomAppBar(
                     backgroundColor = MaterialTheme.colors.primary,
                     contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.primary),
                     elevation = AppBarDefaults.BottomAppBarElevation,
                 ) {
 
+
+
                     BottomNavigation {
                         BottomNavigationItem(
                             selected = true,
-                            onClick = { /* Home ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
+                            onClick = { navController.navigate(Screens.MainScreen.route)/* Home ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Default.Home,
+                                    imageVector = Icons.Default.AccountBox,
                                     contentDescription = "",
                                     tint = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
                                 )
@@ -109,25 +122,15 @@ fun MainScreen(bootCampViewModel: BootCampViewModel){
                         )
                         BottomNavigationItem(
                             selected = false,
-                            onClick = { /* Para ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
+                            onClick = { navController.navigate(Screens.ChatScreen.route)/* Para ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Default.Home,
+                                    imageVector = Icons.Default.MailOutline,
                                     contentDescription = "",
                                     tint = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
                                 )
                             }
                         )
-                        BottomNavigationItem(
-                            selected = false,
-                            onClick = { /* Chat ikonuna tıklama işlemleri burada gerçekleştirilebilir */ },
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = "",
-                                    tint = contentColorFor(backgroundColor = MaterialTheme.colors.primary)
-                                )
-                            })
                     }
 
                 }
@@ -139,7 +142,8 @@ fun MainScreen(bootCampViewModel: BootCampViewModel){
 @Preview
 @Composable
 fun DefaultPreview(){
-    MainScreen(bootCampViewModel = BootCampViewModel())
+    //MainScreen(bootCampViewModel = BootCampViewModel())
 }
+
 
 

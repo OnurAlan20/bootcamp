@@ -24,12 +24,13 @@ import kotlin.time.Duration.Companion.seconds
 suspend fun sendGPTPropt(message:String):String?{
     val config = OpenAIConfig(
         token = "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",
-        timeout = Timeout(socket = 60.seconds),
+        timeout = Timeout(socket = 120.seconds),
         // additional configurations...
     )
 
     val openAI = OpenAI("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")
     openAI.model(ModelId("gpt-3.5-turbo"))
+
     val chatCompletionRequest = ChatCompletionRequest(
         model = ModelId("gpt-3.5-turbo"),
         messages = listOf(

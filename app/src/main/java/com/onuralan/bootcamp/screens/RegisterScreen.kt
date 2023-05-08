@@ -3,6 +3,7 @@ package com.onuralan.bootcamp.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -14,12 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.onuralan.bootcamp.Screens
 
 @Composable
-fun RegisterScreen(bootCampViewModel: BootCampViewModel){
+fun RegisterScreen(bootCampViewModel: BootCampViewModel,navController: NavController){
     Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFE7E4E4)) {
         Column(modifier = Modifier
             .fillMaxSize()
@@ -63,6 +67,9 @@ fun RegisterScreen(bootCampViewModel: BootCampViewModel){
                 shape = RoundedCornerShape(15.dp),
                 modifier = Modifier.fillMaxWidth(),
                 value = bootCampViewModel.registerPassword.value,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
                 colors = TextFieldDefaults.outlinedTextFieldColors(unfocusedBorderColor = Color(0xFFD14C21)),
                 leadingIcon = { Icon(imageVector = Icons.Default.Star, contentDescription = "emailIcon", tint = Color(0xFFD14C21)) },
                 onValueChange = {
@@ -78,6 +85,8 @@ fun RegisterScreen(bootCampViewModel: BootCampViewModel){
                     bootCampViewModel.register(bootCampViewModel.registerName.value,bootCampViewModel.registerEmail.value,bootCampViewModel.registerPassword.value)
                     bootCampViewModel.registerEmail.value = ""
                     bootCampViewModel.registerPassword.value = ""
+                    navController.navigate(Screens.LoginScreen.route)
+
                 },
                 modifier = Modifier.width(300.dp),
                 elevation = ButtonDefaults.elevation(4.dp),
@@ -86,17 +95,17 @@ fun RegisterScreen(bootCampViewModel: BootCampViewModel){
 
 
                 ) {
-                Text(text = "Log In",fontSize = 30.sp, style = TextStyle.Default, color = Color.Black)
+                Text(text = "Register",fontSize = 30.sp, style = TextStyle.Default, color = Color.Black)
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                Text(text = "Don't you have an account?",
+                Text(text = "Do you have an account?",
                     style = TextStyle.Default, color = Color.DarkGray,
                     fontSize = 18.sp,
 
                     modifier = Modifier
                         .padding(end = 10.dp)
-                        .clickable {})
+                        .clickable {navController.navigate(Screens.LoginScreen.route)})
             }
         }
 
@@ -106,5 +115,5 @@ fun RegisterScreen(bootCampViewModel: BootCampViewModel){
 @Preview
 @Composable
 fun DefaultRegisterScreen(){
-    RegisterScreen(bootCampViewModel = BootCampViewModel() )
+    //RegisterScreen(bootCampViewModel = BootCampViewModel() )
 }

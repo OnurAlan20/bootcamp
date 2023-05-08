@@ -1,9 +1,15 @@
 package com.onuralan.bootcamp.screens
 
+import android.content.Intent
+import android.provider.Settings.Global
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -14,6 +20,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.type.DateTime
+import com.onuralan.bootcamp.Screens
 import com.onuralan.bootcamp.models.Message
 import com.onuralan.bootcamp.models.User
 import kotlinx.coroutines.GlobalScope
@@ -30,7 +37,7 @@ class BootCampViewModel:ViewModel(){
     var gptRequest = mutableStateOf("")
     var message = mutableStateOf("")
     var messageList = mutableStateListOf(Message("Bu gün işe araba yerine yürüyerek gidip geldim.","Sarp"))
-
+    lateinit var navController:NavHostController
 
 
     private lateinit var auth:FirebaseAuth;
@@ -41,6 +48,7 @@ class BootCampViewModel:ViewModel(){
         auth = Firebase.auth
         currentUser = auth.currentUser
         db = Firebase.firestore
+        
     }
     fun login(email:String,password:String){
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
@@ -56,6 +64,8 @@ class BootCampViewModel:ViewModel(){
                             )
                             println("Login Success")
                             println("User:" + user.uid)
+                            println(navController)
+
                         }
                     }
                 }
@@ -94,21 +104,38 @@ class BootCampViewModel:ViewModel(){
 
     fun getMessages(messageList:SnapshotStateList<Message>){
         GlobalScope.launch {
-            db.collection("messages").orderBy("date",
-                Query.Direction.DESCENDING).addSnapshotListener(EventListener { value, error ->
-                System.out.println("UPDATED")
-                if (value != null) {
 
-                    for (message in value.documentChanges){
-                        println(message.document.data.get("message"))
-                        messageList.add(Message(message.document.data.get("message") as String,
-                            message.document.data.get("name") as String))
+            FirebaseFirestore.getInstance().collection("messages")
+                .orderBy("time", Query.Direction.DESCENDING)
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        // Hata durumu
+                        println("Snapshot listener hata: $error")
+                    } else {
+                        // Değişiklikleri işle
+                        if (value != null) {
+                            var flag = true
+                            for (message in value.documentChanges) {
+                                if (flag){
+                                    flag = false
+                                    println(messageList.toList().size.toString())
+                                    if (message.document.data.get("message") != messageList.toList().last().message){
+                                        messageList.add(
+                                            Message(
+                                                message.document.data.get("message") as String,
+                                                message.document.data.get("name") as String
+                                            )
+                                        )
+                                        println("flaggggggggggggggggggg")
+                                    }
+
+                                }
+
+                            }
+                        }
                     }
-
                 }
-            })
         }
-
     }
     fun sendMessage(message:String){
         var msg = hashMapOf(
@@ -120,10 +147,18 @@ class BootCampViewModel:ViewModel(){
             db.collection("messages").add(msg).addOnCompleteListener {
                 if (it.isSuccessful){
                     println("Message send")
+                   // getMessages(messageList)
                 }
             }
         }
 
+    }
+    fun changeIntent(){
+        val int = Intent()
+    }
+    @Composable
+    fun initController() {
+        navController = rememberNavController()
     }
 }
 
